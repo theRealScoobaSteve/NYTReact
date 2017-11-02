@@ -10,24 +10,24 @@ class FORM extends Component {
 				<form className="form">
 					<input
 					value={this.props.title}
-					index="title"
+					name="title"
 					onChange={this.props.HandleInputChange}
 					type="text"
-					placeholder="First Name"
+					placeholder="Title"
 					/>
 					<input
 					value={this.props.year}
-					index="year"
+					name="year"
 					onChange={this.props.HandleInputChange}
 					type="text"
-					placeholder="Last Name"
+					placeholder="Year"
 					/>
 					<input
 					value={this.props.month}
-					index="month"
+					name="month"
 					onChange={this.props.HandleInputChange}
 					type="test"
-					placeholder="Password"
+					placeholder="Month"
 					/>
 					<button onClick={this.props.HandleFormSubmit}>Submit</button>
 				</form>
