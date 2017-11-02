@@ -115,26 +115,26 @@ class App extends Component {
 	};
 
   render() {
-	let el = null;
-	if(this.state.results.length > 0)
-	{
-		el = (<ROW>
-				<COL size="md-12">
-					{this.state.results.map(item =>
-					(
-						<CARD key={item._id} title={item.title} text={item.summary} submitBtn="Submit" />
-					))}
-				</COL>
-			 </ROW>)
-	}
-	else
-	{
-		el = (<ROW>
-					  <COL size="md-12">
-						  <h1>No Results</h1>
-					  </COL>
-				  </ROW>)
-	}	
+	// let el = null;
+	// if(this.state.results.length > 0)
+	// {
+	// 	el = (<ROW>
+	// 			<COL size="md-12">
+	// 				{this.state.results.map(item =>
+	// 				(
+	// 					<CARD key={item._id} title={item.title} text={item.summary} submitBtn="Submit" />
+	// 				))}
+	// 			</COL>
+	// 		 </ROW>)
+	// }
+	// else
+	// {
+	// 	el = (<ROW>
+	// 				  <COL size="md-12">
+	// 					  <h1>No Results</h1>
+	// 				  </COL>
+	// 			  </ROW>)
+	// }	
 
     return (
 		<CONTAINER>
@@ -149,7 +149,6 @@ class App extends Component {
 					title={this.state.title} year={this.state.year} month={this.state.month}/>
 				</COL>
 			</ROW>
-			{el}
 		</CONTAINER>	
     )	
   }
