@@ -16,7 +16,7 @@ class App extends Component {
 			results: [{
 				title: "HELLO",
 				text: "WORLD",
-				_id: 10
+				_id: 102010
 			}],
 			favorites: [],
 			title: "",
@@ -115,21 +115,21 @@ class App extends Component {
 	};
 
   render() {
-	let element = null;
-	if(this.state.results)
+	let el = null;
+	if(this.state.results.length > 0)
 	{
-		element = (<ROW>
-					<COL size="md-12">
-						{this.state.results.map(item =>
-						(
-							<CARD key={item._id} title={item.title} text={item.summary} submitBtn="Submit" />
-						))}
-					</COL>
-					</ROW>)
+		el = (<ROW>
+				<COL size="md-12">
+					{this.state.results.map(item =>
+					(
+						<CARD key={item._id} title={item.title} text={item.summary} submitBtn="Submit" />
+					))}
+				</COL>
+			 </ROW>)
 	}
 	else
 	{
-		element = (<ROW>
+		el = (<ROW>
 					  <COL size="md-12">
 						  <h1>No Results</h1>
 					  </COL>
@@ -146,10 +146,10 @@ class App extends Component {
 			<ROW>
 				<COL size="md-12">
 					<FORM HandleInputChange={this.HandleInputChange} HandleFormSubmit={this.HandleFormSubmit} 
-					title={this.state.month} year={this.state.year} month={this.state.month}/>
+					title={this.state.title} year={this.state.year} month={this.state.month}/>
 				</COL>
 			</ROW>
-			{element}
+			{el}
 		</CONTAINER>	
     )	
   }
