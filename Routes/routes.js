@@ -61,7 +61,14 @@ module.exports = (APP) =>
         },function(err, response, body) 
         {
             body = JSON.parse(body)
-            console.log(body)
+            let results = []
+            let info = body.response.docs
+            console.log(info)
+            for(var i = 0; i < 5; i++)
+            {
+                results.push(info[i])
+            }
+            res.json(results)
         })     
     })
 }
