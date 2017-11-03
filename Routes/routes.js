@@ -40,7 +40,11 @@ module.exports = (APP) =>
 
     APP.post("/api/search", function(req, res)
     {
-        const POST_REQUEST = req.body;
+        //Grabs the json
+        const POST_REQUEST = req.body
+        //Concatonates the data to a string creating a the beginning and end date
+        const BEGIN = String(POST_REQUEST.year) + POST_REQUEST.month  + "01"
+        const END = String(POST_REQUEST.year) + POST_REQUEST.month  + "29"
 
         console.log(POST_REQUEST)
 
@@ -50,14 +54,14 @@ module.exports = (APP) =>
             qs: 
             {
               'api-key': API_KEY.MY_KEY,
-              'q': POST_REQUEST.title
-            },
-        }, function(err, response, body) 
+              'q': POST_REQUEST.title,
+              'begin_date': BEGIN,
+              'end_date': END
+            }
+        },function(err, response, body) 
         {
-            body = JSON.parse(body);
-            console.log(body);
-        })
-
-         
+            body = JSON.parse(body)
+            console.log(body)
+        })     
     })
 }
