@@ -4,8 +4,8 @@ const AXIOS = require("axios")
 const PATH = require('path')
 const MONGO = require("../ORM/mongoObject.js")
 const BODYPARSER = require("body-parser")
-let mongo = new MONGO("mongodb://Steve:123456@ds149974.mlab.com:49974/mongo-scraper")
-const API_KEY = require("./config.js")
+let mongo = new MONGO("mongodb://Steve:123456@ds243335.mlab.com:43335/favorites")
+const API_KEY = require("./key.js")
 const EXPRESS = require('express')
 
 module.exports = (APP) =>
@@ -41,13 +41,11 @@ module.exports = (APP) =>
     APP.post("/api/search", function(req, res)
     {
         //Grabs the json
-        const POST_REQUEST = req.body
+        const POST_REQUEST = req.body.params
         //Concatonates the data to a string creating a the beginning and end date
-        const BEGIN = String(POST_REQUEST.year) + POST_REQUEST.month  + "01"
-        const END = String(POST_REQUEST.year) + POST_REQUEST.month  + "29"
-
-        console.log(POST_REQUEST)
-
+        const BEGIN = POST_REQUEST.year + POST_REQUEST.month  + "01"
+        const END = POST_REQUEST.year + POST_REQUEST.month  + "29"
+        //Makes a request to the NYT API
         REQUEST.get(
         {
             url: "https://api.nytimes.com/svc/search/v2/articlesearch.json",
@@ -60,15 +58,37 @@ module.exports = (APP) =>
             }
         },function(err, response, body) 
         {
+            //Grabs the response from the API
             body = JSON.parse(body)
             let results = []
+            console.log(body)
             let info = body.response.docs
-            console.log(info)
             for(var i = 0; i < 5; i++)
             {
                 results.push(info[i])
             }
+            //Sends the data back to the client
             res.json(results)
         })     
+    })
+
+    APP.post("/api/addfav", function(req,res)
+    {
+        let data = req.body
+
+        mongo.Insert("favorites", data).then(function(results)
+        {
+            console.log(results)
+            res.json(results)
+        })
+    })
+
+    APP.get("/api/favorites", function(req,res)
+    {
+        mongo.Query("favorites", {}).then(function(results)
+        {
+            console.log(results)
+            res.json(results)
+        })
     })
 }

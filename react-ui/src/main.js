@@ -12,16 +12,7 @@ export default class Main extends Component {
 		super(props)
 		this.state = 
 		{
-			results: [{
-				title: "HELLO",
-				text: "WORLD",
-				_id: 0
-            },
-            {
-				title: "HELLO1",
-				text: "WORLD1",
-				_id: 1
-			}],
+			results: [],
 			favorites: [],
 			title: "",
 			month: "",
@@ -41,28 +32,6 @@ export default class Main extends Component {
 	// 	{
 	// 		console.log(response);
 	// 		this.setState({results: response})
-	// 	})
-	// 	.catch(error =>
-	// 	{
-	// 		console.log(error);
-	// 	});
-	// }
-
-	// HandleSearch = () =>
-	// {
-	// 	axios.post('/api/search', 
-	// 	{
-	// 		params: 
-	// 		{
-	// 			month: this.state.month,
-	// 			title: this.state.title,
-	// 			year: this.state.year,
-	// 			favorite: false
-	// 		}
-	// 	})
-	// 	.then(response =>
-	// 	{
-	// 		console.log(response);
 	// 	})
 	// 	.catch(error =>
 	// 	{
@@ -95,19 +64,45 @@ export default class Main extends Component {
 	{
 		// Getting the value and name of the input which triggered the change
 		let value = event.target.value;
-		const data = event.target.name;
-		console.log(data)
+		const name = event.target.name;
+		console.log(name)
 		// Updating the input's state
 		this.setState(
 		{
-			[data]: value
+			[name]: value
 		})
+		console.log("HandleInputChange " + this.state)
 	}
 	
 	HandleFormSubmit = event => 
 	{
 		// Preventing the default behavior of the form submit (which is to refresh the page)
-		event.preventDefault();
+		event.preventDefault()
+
+		console.log("HandleFormSubmit " + this.state)
+		AXIOS.post('/api/search', 
+		{
+			params: 
+			{
+				month: this.state.month,
+				title: this.state.title,
+				year: this.state.year,
+				favorite: false
+			}
+		})
+		.then(response =>
+		{
+			console.log("Post Resonponse HandleForm " + response)
+			this.setState(
+			{
+				results: response.data
+			})
+			console.log(this.state.results)
+		})
+		.catch(error =>
+		{
+			console.log(error)
+		})
 
 		this.setState(
 		{
@@ -132,9 +127,9 @@ export default class Main extends Component {
                     </COL>
                 </ROW>
                 <ROW>
-                    {this.state.results.length > 0 ? this.state.results.map(item =>
+                    {this.state.results ? this.state.results.map(item  =>
                     (
-                        <CARD key={item._id} title={item.title} text={item.text} submitBtn="Submit" />
+                        <CARD key={item._id} title={item.headline.main} text={item.snippet} submitBtn="Favorite" />
                     )) :
                     (<h1>No Results</h1>)}
                 </ROW>

@@ -5,7 +5,7 @@ const FORM = props =>
 {
 		return (
 			<div>
-				<form className="form">
+				<form className="form" onSubmit={props.HandleFormSubmit}>
 					<input
 					value={props.title}
 					name="title"
@@ -27,7 +27,7 @@ const FORM = props =>
 					type="test"
 					placeholder="Month"
 					/>
-					<button onClick={props.HandleFormSubmit}>Submit</button>
+					<button type="Submit">Submit</button>
 				</form>
 			</div>
 		)
