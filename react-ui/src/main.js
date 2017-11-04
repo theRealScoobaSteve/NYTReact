@@ -39,26 +39,26 @@ export default class Main extends Component {
 	// 	});
 	// }
 
-	// SaveArticles = () => 
-	// {
-	// 	axios.update('/api/favorites', 
-	// 	{
-	// 		params: 
-	// 		{
-	// 			title: this.state.title,
-	// 			favorite: true
-	// 		}
-	// 	})
-	// 	.then(response =>
-	// 	{
-	// 		console.log(response);
-	// 		this.setState({results: response})
-	// 	})
-	// 	.catch(error =>
-	// 	{
-	// 		console.log(error);
-	// 	});
-	// }
+	SaveArticles = () => 
+	{
+		AXIOS.post('/api/addfav', 
+		{
+			params: 
+			{
+				title: this.state.title,
+				favorite: true
+			}
+		})
+		.then(response =>
+		{
+			console.log(response);
+			this.setState({results: response})
+		})
+		.catch(error =>
+		{
+			console.log(error);
+		});
+	}
 
 	HandleInputChange = event => 
 	{
@@ -92,7 +92,6 @@ export default class Main extends Component {
 		})
 		.then(response =>
 		{
-			console.log("Post Resonponse HandleForm " + response)
 			this.setState(
 			{
 				results: response.data
@@ -133,6 +132,9 @@ export default class Main extends Component {
                     )) :
                     (<h1>No Results</h1>)}
                 </ROW>
+				<ROW>
+
+				</ROW>
 		    </CONTAINER>
         )
     }

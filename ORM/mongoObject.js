@@ -25,9 +25,9 @@ var Mongo = function(url)
             MongoClient.connect(url, (err, db) =>
             {
                 if (err) throw err;
-                db.collection(collectionName).insertOne(dataObject, (err, res) =>
+                db.collection(collectionName).insertOne(dataObject, (err, result) =>
                 {
-                    if (err) reject(err);
+                    if (err) rej(err);
                     console.log("1 document inserted");
                 });
             })
@@ -64,19 +64,37 @@ var Mongo = function(url)
         })
     }
 
-    this.Delete = (collectionName, query) =>
+    this.DeleteMany = (collectionName, query) =>
     {
         return new Promise((res, rej) =>
         {
             MongoClient.connect(this.url, (err, db) =>
             {
-                if (err)  reject(err);
-                db.collection(collectionName).deleteOne(query, (err, obj) =>
+                if (err)  rej(err);
+                db.collection(collectionName).deleteMany(query, (err, obj) =>
                 {
-                  if (err) reject(err);
-                  console.log("1 document deleted");
+                  if (err) rej(err);
+                  console.log("Documents deleted");
                 });
             });
+        })
+    }
+
+    this.DropCollection = (collectionName) =>
+    {
+        return new Promise((res, rej) =>
+        {
+            MongoClient.connect(this.url, (error,db) =>
+            {
+                if(error) rej(err)
+
+                db.collection(collectionName).drop((err, delOk) =>
+                {
+                    if(err) rej(err)
+                    
+                    console.log("Collection Deleted")
+                })
+            })
         })
     }
 

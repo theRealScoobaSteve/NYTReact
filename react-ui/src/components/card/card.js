@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import {COL} from "../grid"
+import "./card.css"
 
 const CARD = props =>
 {

@@ -45,7 +45,18 @@ module.exports = (APP) =>
         //Concatonates the data to a string creating a the beginning and end date
         const BEGIN = POST_REQUEST.year + POST_REQUEST.month  + "01"
         const END = POST_REQUEST.year + POST_REQUEST.month  + "29"
+
+        mongo.DeleteMany('favorites', {isFavorites: false}).then(function(err, res)
+        {
+            
+        }).catch(function(err)
+        {
+            console.log(err)
+        })
+
         //Makes a request to the NYT API
+        let results = []
+        
         REQUEST.get(
         {
             url: "https://api.nytimes.com/svc/search/v2/articlesearch.json",
@@ -60,13 +71,19 @@ module.exports = (APP) =>
         {
             //Grabs the response from the API
             body = JSON.parse(body)
-            let results = []
-            console.log(body)
+            
             let info = body.response.docs
             for(var i = 0; i < 5; i++)
             {
                 results.push(info[i])
+                results[i].isFavorites = false
+                mongo.Insert('favorites', results[i]).then(function(err, res)
+                {
+                })
             }
+
+            
+
             //Sends the data back to the client
             res.json(results)
         })     
