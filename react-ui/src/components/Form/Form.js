@@ -18,14 +18,14 @@ const FORM = props =>
 					name="year"
 					onChange={props.HandleInputChange}
 					type="text"
-					placeholder="Year"
+					placeholder="Year(YYYY)"
 					/>
 					<input
 					value={props.month}
 					name="month"
 					onChange={props.HandleInputChange}
 					type="test"
-					placeholder="Month"
+					placeholder="Month(MM)"
 					/>
 					<button type="Submit">Submit</button>
 				</form>
