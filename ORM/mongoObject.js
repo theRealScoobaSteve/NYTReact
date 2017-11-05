@@ -100,32 +100,39 @@ var Mongo = function(url)
 
     this.Update = (collection, query, newValues) =>
     {
-        return new Promise(res,rej)
+        const VALUE = {"$set": newValues}
+
+        return new Promise((res,rej) =>
         {
             MongoClient.connect(this.url, (err, db) =>
             {
-                if (err) reject(err);
-                db.collection(collection).updateOne(query, newvalues, (err, res) =>
+                if (err) rej(err)
+                db.collection(collection).updateOne(query, VALUE, (err, res) =>
                 {
-                    if (err) reject(err);
-                    console.log("1 document updated");
-                });
-              });
-        }
+                    if (err) rej(err)
+                    console.log("1 document updated")
+                })
+              })
+        })
+            
     }
 
-    // this.Find = (collection) =>
-    // {
-    //     return new Promise((res,rej) => 
-    //     {
-    //         MongoClient.connect(url, (err,db) => 
-    //         {
-    //             if(err) rej(err);
-    //             res(db.collection(collection).find({"Devoured": false}).toArray())
-    //         })
+    this.FindOne = (collectionName, query) =>
+    {
+        return new Promise((res,rej) => 
+        {
+            MongoClient.connect(this.url, function(err, db) 
+            {
+                  if (err) rej(err) 
+                  db.collection(collectionName).findOne(query, function(err, result) 
+                  {
+                    if (err) rej(err)
+                    res(result)
+                  })
+            })
             
-    //     })
-    // }
+        })
+    }
     
     //Join needs some work, very confusing for me 
 

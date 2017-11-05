@@ -73,15 +73,21 @@ module.exports = (APP) =>
             body = JSON.parse(body)
             
             let info = body.response.docs
-            for(var i = 0; i < 5; i++)
+            if(info)
             {
-                results.push(info[i])
-                results[i].isFavorites = false
-                mongo.Insert('favorites', results[i]).then(function(err, res)
+                for(var i = 0; i < 5; i++)
                 {
-                })
+                    results.push(info[i])
+                    results[i].isFavorites = false
+                    mongo.Insert('favorites', results[i]).then(function(err, res)
+                    {
+                    })
+                }
             }
-
+            else
+            {
+                res.json({results: false})
+            }
             
 
             //Sends the data back to the client
@@ -91,21 +97,43 @@ module.exports = (APP) =>
 
     APP.post("/api/addfav", function(req,res)
     {
-        let data = req.body
-
-        mongo.Insert("favorites", data).then(function(results)
-        {
-            console.log(results)
+        let data = req.body.params
+        String(data)
+        // mongo.Update('favorites', {headline:{main: data}}, {isFavorite: true})
+        mongo.Update('favorites', data, {isFavorites: true}).then(function(err,results)
+        {   
+            try
+            {
+                if(err) throw err
+            }
+            catch(err)
+            {
+                // console.log(err)
+            }
             res.json(results)
         })
     })
 
-    APP.get("/api/favorites", function(req,res)
+    APP.post("/api/favorites", function(req,res)
     {
-        mongo.Query("favorites", {}).then(function(results)
+        mongo.Query("favorites", {isFavorites: true}).then(function(results)
         {
-            console.log(results)
             res.json(results)
         })
+    })
+
+    APP.post("/api/removefav", function(req,res)
+    {
+        const DATA = req.body.params
+
+        mongo.DeleteMany('favorites', DATA).then(function(err, res)
+        {
+            
+        }).catch(function(err)
+        {
+            console.log(err)
+        })
+
+        res.send("Updated")
     })
 }
