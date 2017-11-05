@@ -42,6 +42,7 @@ module.exports = (APP) =>
     {
         //Grabs the json
         const POST_REQUEST = req.body.params
+
         //Concatonates the data to a string creating a the beginning and end date
         const BEGIN = POST_REQUEST.year + POST_REQUEST.month  + "01"
         const END = POST_REQUEST.year + POST_REQUEST.month  + "29"

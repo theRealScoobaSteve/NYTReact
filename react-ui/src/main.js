@@ -6,22 +6,27 @@ import FORM from "./components/Form"
 import CARD from "./components/card"
 import {CONTAINER, ROW, COL} from "./components/grid"
 
+//This is the main body of the entire page, It is also the only
+//stateful component in the entire site.
 export default class Main extends Component {
     constructor(props)
 	{
 		super(props)
 		this.state = 
 		{
-			results: [],
-			favorites: [],
-			title: "",
-			month: "",
-			year: ""
+			results: [],	//Results from the search
+			favorites: [],	//If a article is favorited
+			title: "",		//Title being searched
+			month: "",		//Month being searched
+			year: ""		//Year being searched
 		}
 	}
 	
+	//On page load this method is called
     componentDidMount()
 	{
+		//Makes a call to the api for all of the favorited articles in the
+		//Database if the isFavorites attribute is set to true
 		AXIOS.post('/api/favorites', 
 		{
 			params: 
@@ -31,6 +36,7 @@ export default class Main extends Component {
 		})
 		.then(response =>
 		{	
+			//Changes the state for a rerender when the favorites come back
 			this.setState({favorites: response.data})
 		})
 		.catch(error =>
@@ -41,13 +47,16 @@ export default class Main extends Component {
 
 	SaveArticles = event => 
 	{
+		//Grabs the articles _id 
 		const DATA = event.target.value
-		var self = this
 
-		this.state.results.forEach(function(element)
+		//Loops through then all the search results and looks for a matching _id
+		//and saves it
+		this.state.results.forEach(element =>
 		{
-			if(element._id == DATA)	
+			if(element._id === DATA)	
 			{
+				//Updates the value in the database based on the _id
 				AXIOS.post('/api/addfav', 
 				{
 					params: 
@@ -64,9 +73,14 @@ export default class Main extends Component {
 					console.log(error);
 				});
 
-				let newArray = self.state.favorites.slice();    
-				newArray.push(element);   
-				self.setState({favorites: newArray})
+				let newArray = this.state.favorites.slice(); 
+				
+				if(newArray.indexOf(element))
+				{
+					newArray.push(element); 
+				}
+				  
+				this.setState({favorites: newArray})
 			}
 		})
 	}
