@@ -121,10 +121,12 @@ module.exports = (APP) =>
     APP.post("/api/removefav", function(req,resolve)
     {
         let data = req.body.params
+        let send = {report: false}
         console.log(data)
         mongo.Update('favorites', data, {isFavorites: false}).then(function(results)
         {
-            res.json(results) 
+            send.report = true
+            resolve.json(send) 
         })
     })
 }

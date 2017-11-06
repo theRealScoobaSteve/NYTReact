@@ -150,34 +150,35 @@ export default class Main extends Component {
 				_id: data
 			}
 		})
-		.then(response =>
+		.then(res =>
 		{
-			
-		})
+			//Makes a call to the api for all of the favorited articles in the
+			//Database if the isFavorites attribute is set to true
+			AXIOS.post('/api/favorites', 
+			{
+				params: 
+				{
+					isFavorites: true
+				}
+			})
+			.then(response =>
+			{	
+				console.log("response " + response)
+				//Changes the state for a rerender when the favorites come back
+				this.setState({favorites: response.data})
+				console.log(this.state.favorites)
+			})
+			.catch(error =>
+			{
+				console.log(error)
+			})
+			})
 		.catch(error =>
 		{
 			console.log(error)
 		})
 
-		//Makes a call to the api for all of the favorited articles in the
-		//Database if the isFavorites attribute is set to true
-		AXIOS.post('/api/favorites', 
-		{
-			params: 
-			{
-				isFavorites: true
-			}
-		})
-		.then(response =>
-		{	
-			console.log(response)
-			//Changes the state for a rerender when the favorites come back
-			this.setState({favorites: response.data})
-		})
-		.catch(error =>
-		{
-			console.log(error)
-		})
+		
 	}
     
     render() {

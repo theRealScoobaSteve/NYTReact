@@ -120,7 +120,7 @@ var Mongo = function(url)
     {
         const VALUE = {"$set": newValues}
 
-        return new Promise((res,rej) =>
+        return new Promise((resolve,rej) =>
         {
             MongoClient.connect(this.url, (err, db) =>
             {
@@ -128,7 +128,9 @@ var Mongo = function(url)
                 db.collection(collection).updateOne(query, VALUE, (err, res) =>
                 {
                     if (err) rej(err)
+                    
                     console.log("1 document updated")
+                    resolve(true)
                 })
               })
         })
