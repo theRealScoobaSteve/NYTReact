@@ -25,30 +25,35 @@ export default class Main extends Component {
 	//On page load this method is called
     componentDidMount()
 	{
-		//Makes a call to the api for all of the favorited articles in the
-		//Database if the isFavorites attribute is set to true
-		AXIOS.post('/api/favorites', 
+
+		if(this.state.favorites)
 		{
-			params: 
+			//Makes a call to the api for all of the favorited articles in the
+			//Database if the isFavorites attribute is set to true
+			AXIOS.post('/api/favorites', 
 			{
-			    isFavorites: true
-			}
-		})
-		.then(response =>
-		{	
-			//Changes the state for a rerender when the favorites come back
-			this.setState({favorites: response.data})
-		})
-		.catch(error =>
-		{
-			console.log(error);
-		});
+				params: 
+				{
+					isFavorites: true
+				}
+			})
+			.then(response =>
+			{	
+				//Changes the state for a rerender when the favorites come back
+				this.setState({favorites: response.data})
+			})
+			.catch(error =>
+			{
+				console.log(error)
+			})
+		}
 	}
 
 	SaveArticles = event => 
 	{
 		//Grabs the articles _id 
 		const DATA = event.target.value
+		console.log(DATA)
 
 		//Loops through then all the search results and looks for a matching _id
 		//and saves it
@@ -66,7 +71,7 @@ export default class Main extends Component {
 				})
 				.then(response =>
 				{
-					console.log(response);
+					
 				})
 				.catch(error =>
 				{
@@ -133,36 +138,46 @@ export default class Main extends Component {
 	
 	DeleteFavorite = (event) =>
 	{
-		const DATA = event.target.value
+		event.preventDefault()
+
+		let data = event.target.value
+		console.log(data)
+		
 		AXIOS.post('/api/removefav', 
 		{
 			params: 
 			{
-				"_id": DATA
+				_id: data
 			}
 		})
 		.then(response =>
 		{
-			AXIOS.post('/api/favorites', 
-			{
-				params: 
-				{
-					isFavorites: true
-				}
-			})
-			.then(response =>
-			{	
-				this.setState({favorites: response.data})
-			})
-			.catch(error =>
-			{
-				console.log(error);
-			});
+			
 		})
 		.catch(error =>
 		{
-			console.log(error);
-		});
+			console.log(error)
+		})
+
+		//Makes a call to the api for all of the favorited articles in the
+		//Database if the isFavorites attribute is set to true
+		AXIOS.post('/api/favorites', 
+		{
+			params: 
+			{
+				isFavorites: true
+			}
+		})
+		.then(response =>
+		{	
+			console.log(response)
+			//Changes the state for a rerender when the favorites come back
+			this.setState({favorites: response.data})
+		})
+		.catch(error =>
+		{
+			console.log(error)
+		})
 	}
     
     render() {

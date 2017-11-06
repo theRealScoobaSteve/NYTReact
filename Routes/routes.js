@@ -47,7 +47,7 @@ module.exports = (APP) =>
         const BEGIN = POST_REQUEST.year + POST_REQUEST.month  + "01"
         const END = POST_REQUEST.year + POST_REQUEST.month  + "29"
 
-        mongo.DeleteMany('favorites', {isFavorites: false}).then(function(err, res)
+        mongo.DeleteMany('favorites', {isFavorites: false}).then(function(res)
         {
             
         }).catch(function(err)
@@ -80,14 +80,10 @@ module.exports = (APP) =>
                 {
                     results.push(info[i])
                     results[i].isFavorites = false
-                    mongo.Insert('favorites', results[i]).then(function(err, res)
+                    mongo.Insert('favorites', results[i]).then(function(res)
                     {
                     })
                 }
-            }
-            else
-            {
-                res.json({results: false})
             }
             
 
@@ -99,9 +95,7 @@ module.exports = (APP) =>
     APP.post("/api/addfav", function(req,res)
     {
         let data = req.body.params
-        String(data)
-        // mongo.Update('favorites', {headline:{main: data}}, {isFavorite: true})
-        mongo.Update('favorites', data, {isFavorites: true}).then(function(err,results)
+        mongo.Update('favorites', data, {isFavorites: true}).then(function(results)
         {   
             try
             {
@@ -117,24 +111,20 @@ module.exports = (APP) =>
 
     APP.post("/api/favorites", function(req,res)
     {
-        mongo.Query("favorites", {isFavorites: true}).then(function(results)
+        mongo.Query("favorites", {isFavorites: true})
+        .then(function(results)
         {
             res.json(results)
         })
     })
 
-    APP.post("/api/removefav", function(req,res)
+    APP.post("/api/removefav", function(req,resolve)
     {
-        const DATA = req.body.params
-
-        mongo.DeleteMany('favorites', DATA).then(function(err, res)
+        let data = req.body.params
+        console.log(data)
+        mongo.Update('favorites', data, {isFavorites: false}).then(function(results)
         {
-            
-        }).catch(function(err)
-        {
-            console.log(err)
+            res.json(results) 
         })
-
-        res.send("Updated")
     })
 }

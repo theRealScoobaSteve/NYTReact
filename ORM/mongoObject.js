@@ -64,19 +64,37 @@ var Mongo = function(url)
         })
     }
 
+    //This method works
     this.DeleteMany = (collectionName, query) =>
     {
         return new Promise((res, rej) =>
         {
             MongoClient.connect(this.url, (err, db) =>
             {
-                if (err)  rej(err);
+                if (err)  rej(err)
                 db.collection(collectionName).deleteMany(query, (err, obj) =>
                 {
-                  if (err) rej(err);
-                  console.log("Documents deleted");
-                });
-            });
+                  if (err) rej(err)
+                  console.log("Documents deleted")
+                })
+            })
+        })
+    }
+
+    this.Delete = (collectionName, query) =>
+    {
+        return new Promise((res, rej) =>
+        {
+            MongoClient.connect(this.url, (err, db) =>
+            {
+                if (err)  rej(err)
+                db.collection(collectionName).deleteOne(query, (err, obj) =>
+                {
+                    if (err) rej(err)
+                    console.log("Document deleted")
+                    res(true)
+                })
+            })
         })
     }
 
