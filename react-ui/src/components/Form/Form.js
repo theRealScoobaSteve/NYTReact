@@ -4,9 +4,11 @@ import "./Form.css";
 const FORM = props => 
 {
 		return (
-			<div>
+			<div id="background">
+				<h1>Search For A News Article!</h1>
 				<form className="form" onSubmit={props.HandleFormSubmit}>
 					<input
+					className="form-input"
 					value={props.title}
 					name="title"
 					onChange={props.HandleInputChange}
@@ -14,6 +16,7 @@ const FORM = props =>
 					placeholder="Title"
 					/>
 					<input
+					className="form-input"
 					value={props.year}
 					name="year"
 					onChange={props.HandleInputChange}
@@ -21,13 +24,14 @@ const FORM = props =>
 					placeholder="Year(YYYY)"
 					/>
 					<input
+					className="form-input"
 					value={props.month}
 					name="month"
 					onChange={props.HandleInputChange}
 					type="test"
 					placeholder="Month(MM)"
 					/>
-					<button type="Submit">Submit</button>
+					<button type="Submit" className="form-submit">Submit</button>
 				</form>
 			</div>
 		)
