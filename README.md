@@ -1,6 +1,7 @@
 # NYT-React
 - This website allows for users to search through the New York Times API. After searching can favorite or click the view article button to
 see the actual article on their site.
+- https://www.react-article-search.herokuapp.com
 
 # Technologies
 - MongoDB
