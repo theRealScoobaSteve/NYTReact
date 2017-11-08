@@ -72,23 +72,37 @@ module.exports = (APP) =>
         {
             //Grabs the response from the API
             body = JSON.parse(body)
-            
-            let info = body.response.docs
-            if(info)
+            console.log(body.response)
+            if(body.response !== undefined)
             {
-                for(var i = 0; i < 5; i++)
+                
+                
+                let info = body.response.docs
+                if(info)
                 {
-                    results.push(info[i])
-                    results[i].isFavorites = false
-                    mongo.Insert('favorites', results[i]).then(function(res)
+                    for(var i = 0; i < 5; i++)
                     {
-                    })
+                        results.push(info[i])
+                        results[i].isFavorites = false
+                        results[i].report = true
+                        mongo.Insert('favorites', results[i]).then(function(res)
+                        {
+                        })
+                    }
+                    //Sends the data back to the client
+                    res.json(results)
                 }
+
+                
+            }
+            else
+            {
+                let report = [{report: false}];
+                res.json(report)
             }
             
 
-            //Sends the data back to the client
-            res.json(results)
+            
         })     
     })
 
@@ -122,7 +136,6 @@ module.exports = (APP) =>
     {
         let data = req.body.params
         let send = {report: false}
-        console.log(data)
         mongo.Update('favorites', data, {isFavorites: false}).then(function(results)
         {
             send.report = true

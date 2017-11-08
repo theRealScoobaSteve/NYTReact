@@ -117,11 +117,13 @@ export default class Main extends Component {
 		})
 		.then(response =>
 		{
-			this.setState(
+			if(response.data[0].report)
 			{
-				results: response.data
-			})
-			console.log(this.state.results)
+				this.setState(
+				{
+					results: response.data
+				})
+			}
 		})
 		.catch(error =>
 		{
@@ -152,27 +154,32 @@ export default class Main extends Component {
 		})
 		.then(res =>
 		{
-			//Makes a call to the api for all of the favorited articles in the
-			//Database if the isFavorites attribute is set to true
-			AXIOS.post('/api/favorites', 
+
+			if(res.data.report)
 			{
-				params: 
+				//Makes a call to the api for all of the favorited articles in the
+				//Database if the isFavorites attribute is set to true
+				AXIOS.post('/api/favorites', 
 				{
-					isFavorites: true
-				}
-			})
-			.then(response =>
-			{	
-				console.log("response " + response)
-				//Changes the state for a rerender when the favorites come back
-				this.setState({favorites: response.data})
-				console.log(this.state.favorites)
-			})
-			.catch(error =>
-			{
-				console.log(error)
-			})
-			})
+					params: 
+					{
+						isFavorites: true
+					}
+				})
+				.then(response =>
+				{	
+					console.log("response " + response)
+					//Changes the state for a rerender when the favorites come back
+					this.setState({favorites: response.data})
+					console.log(this.state.favorites)
+				})
+				.catch(error =>
+				{
+					console.log(error)
+				})
+			}
+			
+		})
 		.catch(error =>
 		{
 			console.log(error)
