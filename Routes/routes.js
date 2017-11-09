@@ -4,8 +4,8 @@ const AXIOS = require("axios")
 const PATH = require('path')
 const MONGO = require("../ORM/mongoObject.js")
 const BODYPARSER = require("body-parser")
-let mongo = new MONGO("mongodb://Steve:123456@ds243335.mlab.com:43335/favorites")
 const API_KEY = require("./key.js")
+let mongo = new MONGO(API_KEY.DB)
 const EXPRESS = require('express')
 
 module.exports = (APP) =>
@@ -75,8 +75,6 @@ module.exports = (APP) =>
             console.log(body.response)
             if(body.response !== undefined)
             {
-                
-                
                 let info = body.response.docs
                 if(info)
                 {
