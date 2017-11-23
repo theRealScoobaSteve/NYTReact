@@ -22,29 +22,12 @@ export default class Main extends Component {
 		}
 	}
 	
-	//On page load this method is called
-    componentDidMount()
-	{
-		//Makes a call to the api for all of the favorited articles in the
-		//Database if the isFavorites attribute is set to true
-		AXIOS.post('/api/favorites', 
-		{
-			params: 
-			{
-				isFavorites: true
-			}
-		})
-		.then(response =>
-		{	
-			//Changes the state for a rerender when the favorites come back
-			this.setState({favorites: response.data})
-		})
-		.catch(error =>
-		{
-			console.log(error)
-		})
+	// On page load this method is called
+	// To Do: grab the favorites if any on page load
+    // componentDidMount()
+	// {
 	
-	}
+	// }
 
 	SaveArticles = event => 
 	{
