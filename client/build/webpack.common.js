@@ -19,7 +19,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      title: "Advanced React with Webpack Setup",
+      title: "NYT React",
       template: "./src/index.html"
     })
   ],
