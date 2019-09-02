@@ -4,8 +4,12 @@
   "description": "Displays my knowlege of react.js",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "heroku-postbuild": "cd react-ui/ && npm install --only=dev && npm install && npm run build"
+    "server": "cd server && yarn start:dev",
+    "client": "cd react-ui && yarn start",
+    "start": "concurrently \"yarn server\" \"yarn client\"",
+    "build": "cd client && npm run build",
+    "deploy": "yarn build && git add . && git commit -m \"Building for production\" && git push heroku master",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -17,13 +21,5 @@
   "bugs": {
     "url": "https://github.com/theRealScoobaSteve/NYTReact/issues"
   },
-  "homepage": "https://github.com/theRealScoobaSteve/NYTReact#readme",
-  "dependencies": {
-    "axios": "^0.17.0",
-    "body-parser": "^1.18.2",
-    "express": "^4.16.2",
-    "mongodb": "^2.2.33",
-    "nodemon": "^1.12.1",
-    "request": "^2.83.0"
-  }
+  "homepage": "https://github.com/theRealScoobaSteve/NYTReact#readme"
 }
