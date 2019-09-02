@@ -3,12 +3,13 @@
 see the actual article on their site.
 - https://react-article-search.herokuapp.com/
 # Technologies
-- MongoDB
+- Postgres SQL
 - Express.js
 - React.js
 - Node.js 
+- NestJS
+- Webpack
 - New York Times API
-- Custom Made mongo ORM
 
 # Motivation
-- I made this website to display my knowledge of the MERN stack and practice React in a fun way.
+- Displays my technical skills with modern javascript
