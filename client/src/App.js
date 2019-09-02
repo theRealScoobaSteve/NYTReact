@@ -1,10 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+/* eslint-disable react/prefer-stateless-function */
+import React, { Component } from "react";
+import "./App.css";
 
-const App = ({ title }) => <div>{title}</div>;
+import Main from "./main";
 
-App.propTypes = {
-  title: PropTypes.string.isRequired,
-};
+class App extends Component {
+  render() {
+    return <Main />
+  }
+}
 
 export default App;

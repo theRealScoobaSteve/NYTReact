@@ -1,15 +1,17 @@
 {
-  "parser": "babel-eslint",
   "env": {
     "browser": true,
     "es6": true,
     "node": true
   },
-  "extends": ["airbnb", "prettier"],
+  "extends": ["prettier"],
   "plugins": ["prettier"],
   "rules": {
-    "prettier/prettier": ["error"],
     "import/no-extraneous-dependencies": 0,
     "react/jsx-filename-extension": 0
-  }
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "parser": "babel-eslint"
 }
