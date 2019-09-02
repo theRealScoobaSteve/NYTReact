@@ -1,33 +1,22 @@
-const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
 
-console.log(path.resolve(__dirname, "../src/index.js"));
+const webpackMerge = require('webpack-merge');
 
-module.exports = {
-  entry: path.resolve(__dirname, "../src/index.js"),
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: ["babel-loader", "eslint-loader"]
-      }
-    ]
-  },
-  resolve: {
-    extensions: ["*", ".js", ".jsx"]
-  },
-  plugins: [
-    new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      title: "Advanced React with Webpack Setup",
-      template: "../src/index.html"
-    })
-  ],
-  output: {
-    path: path.resolve(__dirname, "../", "dist"),
-    publicPath: "/",
-    filename: "bundle.js"
-  }
+const commonConfig = require('./webpack.common.js');
+
+const getAddons = addonsArgs => {
+  const addons = Array.isArray(addonsArgs)
+    ? addonsArgs
+    : [addonsArgs];
+
+  return addons
+    .filter(Boolean)
+    .map(name => require(`./addons/webpack.${name}.js`));
+};
+
+module.exports = ({ env, addon }) => {
+  const envConfig = require(`./webpack.${env}.js`);
+
+  return webpackMerge(commonConfig, envConfig, ...getAddons(addon));
 };

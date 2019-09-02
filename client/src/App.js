@@ -1,11 +1,10 @@
-import React, { Component } from "react";
-import "./App.css";
-import Main from "./main.js";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class App extends Component {
-  render() {
-    return <Main />;
-  }
-}
+const App = ({ title }) => <div>{title}</div>;
+
+App.propTypes = {
+  title: PropTypes.string.isRequired,
+};
 
 export default App;
