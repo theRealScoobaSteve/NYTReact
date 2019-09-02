@@ -1,25 +1,28 @@
+var webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+
 module.exports = {
-  entry: "./src/index.js",
+  entry: "../src/index.js",
   module: {
     rules: [
       {
-        test: /\.(js)$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ["babel-loader"]
       }
     ]
   },
   resolve: {
-    extensions: ["*", ".js"]
+    extensions: ["*", ".js", ".jsx"]
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [new HtmlWebpackPlugin(), new webpack.HotModuleReplacementPlugin()],
   output: {
     path: __dirname + "/dist",
     publicPath: "/",
     filename: "bundle.js"
   },
   devServer: {
-    contentBase: "./dist"
+    contentBase: "./dist",
+    hot: true
   }
 };
