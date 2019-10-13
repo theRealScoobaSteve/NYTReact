@@ -1,13 +1,13 @@
 export class HttpResponse {
-  private successCode: boolean;
+  private success: boolean;
 
   // tslint:disable-next-line:array-type
   private data: Array<any>;
 
   private message: string;
 
-  constructor(successCode: boolean, message: string, data: any = []) {
-    this.successCode = successCode;
+  constructor(success: boolean, message: string, data: any = []) {
+    this.success = success;
     this.message = message;
 
     if (data.length === 0) {
