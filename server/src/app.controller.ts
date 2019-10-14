@@ -97,6 +97,9 @@ export class AppController {
 
       articleToSave.authors = authorsToSave;
       articleToSave.images = imagesToSave;
+      articleToSave.favorite = true;
+
+      await this.entityManager.save(article);
 
       return new HttpResponse(true, "Article Successfully Saved");
     } catch (e) {
@@ -108,15 +111,13 @@ export class AppController {
   async removeArticle(@Param() params): Promise<HttpResponse> {
     const { id } = params;
 
-    const article = await this.entityManager.find(Article, id);
-
-    if (article) {
-      await this.entityManager.remove(article);
+    try {
+      await this.entityManager.update(Article, id, { favorite: false });
 
       return new HttpResponse(true, "Article Successfully Removed");
+    } catch (e) {
+      return new HttpResponse(false, e);
     }
-
-    return new HttpResponse(false, "This Article Does not Exist");
   }
 
   @Get("favorites")
