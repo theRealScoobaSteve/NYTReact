@@ -8,54 +8,48 @@ import React, { useState, useEffect } from "react";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Button from "react-bootstrap/Button";
 import DatePicker from "react-datepicker";
+import Card from "react-bootstrap/Card";
 import axios from "axios";
 
 function Home() {
   const [date, setDate] = useState(new Date());
   const [favorites, setFavorites] = useState([]);
-  const [results, setresults] = useState([]);
+  const [results, setResults] = useState([]);
   const [title, setTitle] = useState("");
 
-  useEffect(() => {
-    if (favorites) {
-      // Makes a call to the api for all of the favorited articles in the
-      // Database if the isFavorites attribute is set to true
-      axios
-        .post("/api/favorites", {
-          params: {
-            isFavorites: true
-          }
-        })
-        .then(response => {
-          // Changes the state for a rerender when the favorites come back
-          setFavorites(response.data);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }
-  });
+  // useEffect(() => {
+  //   if (favorites) {
+  //     // Makes a call to the api for all of the favorited articles in the
+  //     // Database if the isFavorites attribute is set to true
+  //     axios
+  //       .post("/api/favorites", {
+  //         params: {
+  //           isFavorites: true
+  //         }
+  //       })
+  //       .then(response => {
+  //         // Changes the state for a rerender when the favorites come back
+  //         setFavorites(response.data);
+  //       })
+  //       .catch(error => {
+  //         console.error(error);
+  //       });
+  //   }
+  // });
 
   function handleFormSubmit(event) {
     // Preventing the default behavior of the form submit (which is to refresh the page)
     event.preventDefault();
     axios
-      .post("/api/search", {
-        params: {
-          month: input.month,
-          title: input.title,
-          year: input.year
-        }
+      .post("http://localhost:3001/api/articles", {
+        query: title
       })
-      .then(response => {
-        if (response.data) {
-          setresults(response.data);
-        }
+      .then(({ data }) => {
+        setResults(data.data[0]);
       })
       .catch(error => {
         console.log(error);
       });
-
     setDate(new Date());
     setTitle("");
   }
@@ -129,6 +123,28 @@ function Home() {
   //     });
   // };
 
+  function renderCards() {
+    if (results.response) {
+      return results.response.docs.map(element => (
+        <div className="col-3">
+          <Card style={{ width: "18rem" }}>
+            <Card.Img variant="top" src="holder.js/100px180" />
+            <Card.Body>
+              <Card.Title>Card Title</Card.Title>
+              <Card.Text>
+                Some quick example text to build on the card title and make up
+                the bulk of the card's content.
+              </Card.Text>
+              <Button variant="primary">Go somewhere</Button>
+            </Card.Body>
+          </Card>
+        </div>
+      ));
+    } else {
+      return <div></div>;
+    }
+  }
+
   return (
     <div className="container">
       <Jumbotron>
@@ -164,6 +180,7 @@ function Home() {
             Submit
           </Button>
         </form>
+        <div className="row">{renderCards()}</div>
       </div>
     </div>
   );

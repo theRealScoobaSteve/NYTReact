@@ -17,15 +17,6 @@ export class FetchArticleDTO {
   readonly query: string;
 }
 
-export class SaveArticleDTO {
-  @ApiModelProperty()
-  readonly article: ArticleDTO;
-  @ApiModelProperty()
-  readonly images: ImageArticle[];
-  @ApiModelProperty()
-  readonly authors: AuthorArticle[];
-}
-
 export class ArticleDTO {
   @ApiModelProperty()
   readonly webUrl: string;
@@ -35,9 +26,13 @@ export class ArticleDTO {
   readonly headline: string;
   @ApiModelProperty()
   readonly pubDate: string;
+  @ApiModelProperty()
+  readonly images: ImageDTO[];
+  @ApiModelProperty()
+  readonly authors: AuthorDTO[];
 }
 
-export class ImageArticle {
+export class ImageDTO {
   @ApiModelProperty()
   readonly height: number;
   @ApiModelProperty()
@@ -48,7 +43,7 @@ export class ImageArticle {
   readonly url: string;
 }
 
-export class AuthorArticle {
+export class AuthorDTO {
   @ApiModelProperty()
   readonly firstName: string;
   @ApiModelProperty()
@@ -71,17 +66,32 @@ export class AppController {
     @Body() fetchArticleDTO: FetchArticleDTO,
   ): Promise<HttpResponse> {
     const { query } = fetchArticleDTO;
-    const data = await nytAPI.get(`${apiURL}${query}`);
+    let articles = [];
 
-    return new HttpResponse(true, "", data);
+    // https://stackoverflow.com/questions/50355670/nestjs-returning-the-result-of-an-http-request?rq=1
+    await nytAPI
+      .get(`${apiURL}${query}`)
+      .then(({ data }) => {
+        articles = data;
+        return;
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    return new HttpResponse(true, "", articles);
   }
 
   @Post("favorites")
-  async saveArticle(
-    @Body() saveArticleDTO: SaveArticleDTO,
-  ): Promise<HttpResponse> {
+  async saveArticle(@Body() articleDTO: ArticleDTO): Promise<HttpResponse> {
     try {
-      const { article, images, authors } = saveArticleDTO;
+      const {
+        webUrl,
+        snippet,
+        headline,
+        pubDate,
+        images,
+        authors,
+      } = articleDTO;
       let imagesToSave = [];
       let authorsToSave = [];
 
@@ -93,13 +103,18 @@ export class AppController {
         authorsToSave.push(this.entityManager.create(Author, authors));
       });
 
-      const articleToSave = this.entityManager.create(Article, article);
+      const articleToSave = this.entityManager.create(Article, {
+        webUrl,
+        snippet,
+        headline,
+        pubDate,
+      });
 
       articleToSave.authors = authorsToSave;
       articleToSave.images = imagesToSave;
       articleToSave.favorite = true;
 
-      await this.entityManager.save(article);
+      await this.entityManager.save(articleToSave);
 
       return new HttpResponse(true, "Article Successfully Saved");
     } catch (e) {
