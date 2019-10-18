@@ -6,6 +6,7 @@ import IosSearch from "react-ionicons/lib/IosSearch";
 import InputGroup from "react-bootstrap/InputGroup";
 import React, { useState, useEffect } from "react";
 import Jumbotron from "react-bootstrap/Jumbotron";
+import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
 import DatePicker from "react-datepicker";
 import Card from "react-bootstrap/Card";
@@ -16,6 +17,7 @@ function Home() {
   const [favorites, setFavorites] = useState([]);
   const [results, setResults] = useState([]);
   const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // useEffect(() => {
   //   if (favorites) {
@@ -36,23 +38,6 @@ function Home() {
   //       });
   //   }
   // });
-
-  function handleFormSubmit(event) {
-    // Preventing the default behavior of the form submit (which is to refresh the page)
-    event.preventDefault();
-    axios
-      .post("http://localhost:3001/api/articles", {
-        query: title
-      })
-      .then(({ data }) => {
-        setResults(data.data[0]);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-    setDate(new Date());
-    setTitle("");
-  }
 
   // function saveArticle(event) {
   //   // Grabs the articles _id
@@ -123,25 +108,78 @@ function Home() {
   //     });
   // };
 
+  function handleFormSubmit(event) {
+    event.preventDefault();
+    setLoading(true);
+    axios
+      .post("http://localhost:3001/api/articles", {
+        query: title
+      })
+      .then(({ data }) => {
+        setResults(data.data[0]);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    setDate(new Date());
+    setTitle("");
+  }
+  // <Card.Text>{element.snippet}</Card.Text>
   function renderCards() {
     if (results.response) {
-      return results.response.docs.map(element => (
-        <div className="col-3">
-          <Card style={{ width: "18rem" }}>
-            <Card.Img variant="top" src="holder.js/100px180" />
-            <Card.Body>
-              <Card.Title>Card Title</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </Card.Text>
-              <Button variant="primary">Go somewhere</Button>
-            </Card.Body>
-          </Card>
-        </div>
-      ));
+      return results.response.docs.map(element => {
+        console.log(element.multimedia[0].url);
+        return (
+          <div className="col-4" key={element._id}>
+            <Card style={{ marginBottom: 25, height: "20rem" }}>
+              <Card.Img
+                variant="top"
+                style={{ objectFit: "cover", height: "10rem" }}
+                src={`https://www.nytimes.com/${element.multimedia[0].url}`}
+              />
+              <Card.Body>
+                <Card.Title>{element.headline.main}</Card.Title>
+
+                <Button variant="primary">View</Button>
+              </Card.Body>
+            </Card>
+          </div>
+        );
+      });
     } else {
-      return <div></div>;
+      if (!loading) {
+        return <div></div>;
+      }
+    }
+  }
+
+  function renderButton() {
+    if (!loading) {
+      return (
+        <Button
+          type="submit"
+          value="Submit"
+          variant="primary"
+          size="md"
+          active={loading}
+        >
+          Submit
+        </Button>
+      );
+    } else {
+      return (
+        <Button variant="primary" disabled>
+          <Spinner
+            as="span"
+            animation="grow"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+          Loading...
+        </Button>
+      );
     }
   }
 
@@ -170,15 +208,7 @@ function Home() {
             />
             <DatePicker selected={date} onChange={date => setDate(date)} />
           </InputGroup>
-          <Button
-            type="submit"
-            value="Submit"
-            variant="primary"
-            size="md"
-            active
-          >
-            Submit
-          </Button>
+          {renderButton()}
         </form>
         <div className="row">{renderCards()}</div>
       </div>
