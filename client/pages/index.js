@@ -9,6 +9,7 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
 import DatePicker from "react-datepicker";
+import Modal from "react-bootstrap/Modal";
 import Card from "react-bootstrap/Card";
 import axios from "axios";
 
@@ -18,6 +19,10 @@ function Home() {
   const [results, setResults] = useState([]);
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   // useEffect(() => {
   //   if (favorites) {
@@ -125,11 +130,16 @@ function Home() {
     setDate(new Date());
     setTitle("");
   }
-  // <Card.Text>{element.snippet}</Card.Text>
+
   function renderCards() {
     if (results.response) {
       return results.response.docs.map(element => {
-        console.log(element.multimedia[0].url);
+        let title = element.headline.main;
+
+        if (title.length > 55) {
+          title = `${title.slice(0, 55)}...`;
+        }
+
         return (
           <div className="col-4" key={element._id}>
             <Card style={{ marginBottom: 25, height: "20rem" }}>
@@ -139,11 +149,33 @@ function Home() {
                 src={`https://www.nytimes.com/${element.multimedia[0].url}`}
               />
               <Card.Body>
-                <Card.Title>{element.headline.main}</Card.Title>
-
-                <Button variant="primary">View</Button>
+                <Card.Title>{title}</Card.Title>
               </Card.Body>
+              <Card.Footer>
+                <Button variant="primary" onClick={handleShow}>
+                  View
+                </Button>
+              </Card.Footer>
             </Card>
+            <Modal
+              show={show}
+              onHide={handleClose}
+              centered
+              aria-labelledby="contained-modal-title-vcenter"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>{element.headline.main}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>{element.snippet}</Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Close
+                </Button>
+                <Button variant="primary" onClick={handleClose}>
+                  Save Changes
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </div>
         );
       });
@@ -210,7 +242,9 @@ function Home() {
           </InputGroup>
           {renderButton()}
         </form>
-        <div className="row">{renderCards()}</div>
+        <div className="row" style={{ marginTop: 20 }}>
+          {renderCards()}
+        </div>
       </div>
     </div>
   );
