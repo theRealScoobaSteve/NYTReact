@@ -11,11 +11,16 @@
     "@zeit/next-css": "^1.0.1",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
+    "hoist-non-react-statics": "^3.3.2",
     "next": "9.0.7",
+    "next-redux-wrapper": "^5.0.0",
     "react": "16.10.2",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-datepicker": "^2.9.6",
     "react-dom": "16.10.2",
-    "react-ionicons": "^3.0.1"
+    "react-ionicons": "^3.0.1",
+    "react-items-carousel": "^2.8.0",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5"
   }
 }
